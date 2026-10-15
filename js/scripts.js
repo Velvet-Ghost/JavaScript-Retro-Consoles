@@ -8,6 +8,7 @@ loadConsoles.addEventListener("click", () => {
             const consoles = httpRequest.responseText
             const consolesObj = JSON.parse(consoles)
             createCards(consolesObj)
+            summarize(consolesObj)
         }
     }
     httpRequest.send()
@@ -33,4 +34,24 @@ function createCards(consolesObj) {
 
         cardsDiv.append(img, name, manufacturer, year)
     }
+}
+
+const summary = document.getElementById("summary")
+function summarize(data) {
+    let oldest = data.consoles[0];
+    let newest = data.consoles[0];
+
+    for (let i = 1; i < data.consoles.length; i++) {
+        // compare data.consoles[i].year with oldest.year and newest.year
+        if (data.consoles[i].year < oldest.year) {
+            oldest = data.consoles[i]
+        }
+        if (data.consoles[i].year > newest.year) {
+            newest = data.consoles[i]
+        }
+    }
+
+    oldest = (`${oldest.name} (${oldest.year})`)
+    newest = (`${newest.name} (${newest.year})`)
+    summary.textContent = `${data.consoles.length} consoles. Oldest: ${oldest}. Newest: ${newest}`
 }
