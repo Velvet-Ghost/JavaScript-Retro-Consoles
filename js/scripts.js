@@ -19,7 +19,7 @@ loadConsoles.addEventListener("click", () => {
 
             createCards(consolesObj)
             summarize(consolesObj)
-        } 
+        }
         else {
             message.textContent = `Error loading page. Status code: ${httpRequest.status}`
         }
@@ -43,7 +43,10 @@ function createCards(consolesObj) {
         const year = document.createElement("p")
         year.textContent = console.year
 
-        cardsDiv.append(img, name, manufacturer, year)
+        const card = document.createElement("div")
+        card.classList.add("card")
+        card.append(img, name, manufacturer, year)
+        cardsDiv.append(card)
     }
 }
 
