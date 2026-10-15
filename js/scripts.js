@@ -1,42 +1,52 @@
 const loadConsoles = document.getElementById("loadConsoles")
+const message = document.getElementById("message")
+const cardsDiv = document.getElementById("cardsDiv")
+const summary = document.getElementById("summary")
 const httpRequest = new XMLHttpRequest()
 
 loadConsoles.addEventListener("click", () => {
+    message.textContent = "Loading..."
+    cardsDiv.innerHTML = ""
+    summary.textContent = ""
+
     httpRequest.open("GET", "https://ozarktechwebdev.com/api/consoles.json")
     httpRequest.onreadystatechange = function () {
         if (httpRequest.readyState == 4 && httpRequest.status == 200) {
             const consoles = httpRequest.responseText
             const consolesObj = JSON.parse(consoles)
+
+            message.textContent = ""
+
             createCards(consolesObj)
             summarize(consolesObj)
+        } 
+        else {
+            message.textContent = `Error loading page. Status code: ${httpRequest.status}`
         }
+
     }
     httpRequest.send()
 })
 
-const cardsDiv = document.getElementById("cardsDiv")
 function createCards(consolesObj) {
-    cardsDiv.innerHTML = ""
-
     for (const console of consolesObj.consoles) {
         const img = document.createElement("img")
         img.src = console.image
         img.alt = console.name
 
         const name = document.createElement("h2")
-        name.innerText = console.name
+        name.textContent = console.name
 
         const manufacturer = document.createElement("p")
-        manufacturer.innerText = console.manufacturer
+        manufacturer.textContent = console.manufacturer
 
         const year = document.createElement("p")
-        year.innerText = console.year
+        year.textContent = console.year
 
         cardsDiv.append(img, name, manufacturer, year)
     }
 }
 
-const summary = document.getElementById("summary")
 function summarize(data) {
     let oldest = data.consoles[0];
     let newest = data.consoles[0];
